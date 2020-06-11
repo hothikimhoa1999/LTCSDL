@@ -1,0 +1,84 @@
+<p>product works!</p>
+<h1 id="tableLabel">Products</h1>
+
+
+<p *ngIf="!products"><em>Loading...</em></p>
+<!-- tạo button new và edit nếu sự kiện click là true thì mở modal new còn false thì mở modal edit -->
+<button class="btn btn-primary" (click)="openModal(true,null)" >Add New Product</button>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="products.totalRecord>0">
+  <thead>
+    <tr>
+      <th>ProductId</th>
+      <th>ProductName</th>
+      <th>Quantity Per Unit</th>
+      <th>Unit Price</th>
+      <th>Action</th> 
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let p of products.data">
+      <td>{{ p.productId }}</td>
+      <td>{{ p.productName }}</td>
+      <td>{{ p.quantityPerUnit }}</td>
+      <td>{{ p.unitPrice }}</td>
+      <td>
+        <button class="btn btn-info btn-sm" (click)="openModal(false,p)" >Edit</button>
+        <button class="btn btn-danger btn-sm" (click)="deleteProduct(p)" >Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- phân trang -->
+<ul class="pagination">
+    <li class="page-item">
+        <a href="javascript:void(0);" (click)="searchPrevious()">Previous</a>
+    </li>
+    <li class="page-item">{{products.page}}</li>
+    <li class="page-item">
+        <a href="javascript:void(0);" (click)="searchNext()">Next</a>
+    </li>
+</ul>
+
+<!-- Modal cho xóa zs edit-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" *ngIf="isEdit" id="emxampleModalLabel">Add New Product</h5>
+        <h5 class="modal-title" *ngIf="!isEdit" id="emxampleModalLabel">Edit Product</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class = "row" *ngIf="isEdit">
+          <div class="col-4">Product ID</div>
+          <div class="col-8"><input class="form-control" [(ngModel)] = "product.productId"></div>
+        </div> <br>
+
+        <div class = "row">
+          <div class="col-4">Product Name</div>
+          <div class="col-8"><input class="form-control" [(ngModel)] = "product.productName"></div>
+        </div> <br>
+
+        <div class = "row">
+          <div class="col-4">Quantity Per Unit</div>
+          <div class="col-8"><input class="form-control" [(ngModel)] = "product.quantityPerUnit"></div>
+        </div> <br>
+          
+        <div class = "row">
+          <div class="col-4">Unit Price</div>
+          <div class="col-8"><input class="form-control" [(ngModel)] = "product.unitPrice" type="number"></div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click) = updateProduct()>Save</button>
+        <button type="button" class="btn btn-success" (click)="addProduct()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
